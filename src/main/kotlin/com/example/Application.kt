@@ -11,9 +11,11 @@ import io.ktor.http.*
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
+    val port = System.getenv("PORT")?.toIntOrNull() ?: 8080
+
     embeddedServer(
         Netty,
-        port = 8080,
+        port = port,
         host = "0.0.0.0",
         module = Application::module
     ).start(wait = true)
