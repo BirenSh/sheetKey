@@ -12,7 +12,6 @@ repositories {
 }
 
 dependencies {
-    // Ktor Server
     implementation("io.ktor:ktor-server-core:2.3.12")
     implementation("io.ktor:ktor-server-netty:2.3.12")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.12")
@@ -24,28 +23,25 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
 
-    // Google Auth
     implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")
-
-    // Logging
     implementation("ch.qos.logback:logback-classic:1.4.14")
-
-    // Kotlinx
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
-    // Testing
     testImplementation(kotlin("test"))
 }
-
 
 application {
     mainClass.set("com.example.ApplicationKt")
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "com.example.ApplicationKt"
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+}
 
 tasks.test {
     useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(17)
 }
